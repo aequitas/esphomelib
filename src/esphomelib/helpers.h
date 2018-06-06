@@ -20,6 +20,10 @@
   #define JSON_BUFFER_SIZE (JSON_OBJECT_SIZE(32))
 #endif
 
+#ifdef ARDUINO_ARCH_ESP32
+  #include <driver/rmt.h>
+#endif
+
 ESPHOMELIB_NAMESPACE_BEGIN
 
 /// Callback function typedef for parsing JsonObjects.
@@ -250,6 +254,14 @@ class TemplatableValue {
 extern CallbackManager<void(const char *)> shutdown_hooks;
 extern CallbackManager<void(const char *)> safe_shutdown_hooks;
 
+#ifdef ARDUINO_ARCH_ESP32
+  extern rmt_channel_t next_rmt_channel;
+
+  rmt_channel_t select_next_rmt_channel();
+#endif
+
+void delay_microseconds_accurate(uint32_t usec);
+
 // ================================================
 //                 Definitions
 // ================================================
@@ -279,6 +291,10 @@ SlidingWindowMovingAverage<T>::SlidingWindowMovingAverage(size_t max_size) : max
 
 template<typename T>
 T SlidingWindowMovingAverage<T>::next_value(T value) {
+  if (isnan(value)) {
+    // protect from NAN values
+    return this->calculate_average();
+  }
   if (this->queue_.size() == this->max_size_) {
     this->sum_ -= this->queue_.front();
     this->queue_.pop();

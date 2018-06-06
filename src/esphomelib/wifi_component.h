@@ -31,6 +31,12 @@ struct ManualIP {
   IPAddress dns2; ///< The second DNS server. 0.0.0.0 for default.
 };
 
+enum WiFiComponentState {
+  WIFI_COMPONENT_OFF = 0,
+  WIFI_COMPONENT_SCANNING_NETWORKS,
+
+};
+
 /// This component is responsible for managing the ESP WiFi interface.
 class WiFiComponent : public Component {
  public:

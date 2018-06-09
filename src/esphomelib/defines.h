@@ -31,9 +31,7 @@
   #define USE_DHT_SENSOR
   #define USE_DHT12_SENSOR
   #define USE_DALLAS_SENSOR
-  #ifdef ARDUINO_ARCH_ESP32
-    #define USE_PULSE_COUNTER_SENSOR
-  #endif
+  #define USE_PULSE_COUNTER_SENSOR
   #define USE_ADC_SENSOR
   #define USE_ADS1115_SENSOR
   #define USE_BMP085_SENSOR
@@ -87,6 +85,7 @@
   #ifdef ARDUINO_ARCH_ESP32
     #define USE_ESP32_HALL_SENSOR
   #endif
+  #define USE_DUTY_CYCLE_SENSOR
 #endif
 
 #ifdef USE_REMOTE_RECEIVER
@@ -149,6 +148,11 @@
   #endif
 #endif
 #ifdef USE_PULSE_COUNTER_SENSOR
+  #ifndef USE_SENSOR
+    #define USE_SENSOR
+  #endif
+#endif
+#ifdef USE_DUTY_CYCLE_SENSOR
   #ifndef USE_SENSOR
     #define USE_SENSOR
   #endif
